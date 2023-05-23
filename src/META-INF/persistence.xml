@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="My_server_project_JPAPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entities.LoginAttempts</class>
+    <class>entities.UserPermission</class>
+    <class>entities.Email</class>
+    <class>entities.LastName</class>
+    <class>entities.Location</class>
+    <class>entities.Sysdiagrams</class>
+    <class>entities.SignupSummary</class>
+    <class>entities.Address</class>
+    <class>entities.Volunteer</class>
+    <class>entities.FirstName</class>
+    <class>entities.Password</class>
+    <class>entities.Phone</class>
+    <class>entities.User</class>
+    <class>entities.Training</class>
+    <validation-mode>NONE</validation-mode>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=MyProjectJava;trustServerCertificate=true;"/>
+      <property name="javax.persistence.jdbc.user" value="my project"/>
+      <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="javax.persistence.jdbc.password" value="1234"/>
+    </properties>
+  </persistence-unit>
+</persistence>
