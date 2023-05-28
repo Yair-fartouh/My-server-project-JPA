@@ -1,7 +1,9 @@
 package main;
 
 import controllers.FirstNameJpaController;
+import entities.Training;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.ParameterMode;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -59,6 +61,13 @@ public class Main {
         String pass = (String) query3.getOutputParameterValue("Password");
         String salt = (String) query3.getOutputParameterValue("Salt");
         System.out.println("password: " + pass + " salt: " + salt);
+
+        List<Training> users = em.createNamedQuery("Training.findAll", Training.class).getResultList();
+
+            // דפסת התוצאות
+            for (Training user : users) {
+                System.out.println(user.toString());
+            }
         
         em.getTransaction().commit();
         /*
@@ -70,7 +79,7 @@ public class Main {
          */
         em.close();
         emf.close();
-
+        
     }
 
 }

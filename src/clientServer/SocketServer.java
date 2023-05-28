@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SocketServer {
+
     private final int PORT = 9999;
     private ServerSocket serverSocket;
 
@@ -26,6 +27,7 @@ public class SocketServer {
             e.printStackTrace();
         }
     }
+
     public void stop() {
         try {
             serverSocket.close();
@@ -33,6 +35,7 @@ public class SocketServer {
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) {
         SocketServer server = new SocketServer();
         server.start();

@@ -1,11 +1,11 @@
 package clientServer;
 
+import DTO.VolunteerDTO;
+import DataStoreSingleton.DataStore;
 import SQL_connection.AuthenticationService;
 import java.io.*;
 import java.net.Socket;
 import SQL_connection.Repository;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClientHandler implements Runnable {
 
@@ -27,10 +27,10 @@ public class ClientHandler implements Runnable {
     }
 
     public void setUser_id(int user_id) {
+        repository.setUser_id(user_id);
         this.user_id = user_id;
     }
 
-    
     @Override
     public void run() {
         try {
@@ -55,8 +55,10 @@ public class ClientHandler implements Runnable {
                         if (inputLine.getLoginOrRegister().equals("LOGIN")) {
                             userId = repository.CheckUserByEmail(inputLine.getEmail());     //אם צריך להעביר לפני הבדיקה של לוגין
                             setUser_id(userId);
-                            
-                            if (getUser_id()!= 0) {
+                            //TODO: לא לשכוח למחוק את ההדפסה !!!!!!!!!!!!!!!!!
+                            //VolunteerDTO o = repository.getAllData();
+                            //System.out.println(o.getVolunteer_id() + " " + o.getTraining_id());
+                            if (getUser_id() != 0) {
                                 /**
                                  * The user enters his email, and I'm going to
                                  * check with the DB if such an email exists, if
@@ -74,7 +76,7 @@ public class ClientHandler implements Runnable {
 
                                 if (inputLine.getRequestType().equals("insertToLoginAttempts")) {
                                     //להכניס לטבלת הניסיון של אותו אימייל לכניסה למערכת
-                                    repository.insertLoginAttempt(getUser_id());
+                                    repository.insertLoginAttempt();
                                 }
                             } else {
                                 service = new AuthenticationService();
@@ -104,6 +106,17 @@ public class ClientHandler implements Runnable {
                                         out.flush();
                                     }
                                 }
+                            } else {
+                                if (inputLine.getLoginOrRegister().equals("HOME")) {
+                                    if (inputLine.getRequestType().equals("Information")) {
+                                        VolunteerDTO volunteerDTO = repository.getAllData();
+                                        DataStore.getInstance().setVolunteerDTO(volunteerDTO);
+                                        //System.out.println(DataStore.getInstance().getVolunteerDTO().getEmail());
+                                        
+                                        out.writeObject((VolunteerDTO) volunteerDTO);
+                                        out.flush();
+                                    }
+                                }
                             }
                         }
                     } while ((inputLine = (SendToServer) in.readObject()) != null);
@@ -112,11 +125,10 @@ public class ClientHandler implements Runnable {
             }
 
             System.out.println("Client disconnected: " + clientSocket.getInetAddress().getHostAddress());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public void outService(AuthenticationService service) throws IOException {
