@@ -3,11 +3,9 @@ package DTO;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class VolunteerDTO implements Serializable{
+public class VolunteerDTO implements Serializable {
 
     private int user_id;
-    private int volunteer_id;
-    private int training_id;
     private String firstName;
     private String lastName;
     private String email;
@@ -16,13 +14,11 @@ public class VolunteerDTO implements Serializable{
     private Date birthDate;
     private VolunteerResourcesDTO volunteerResourcesDTO;
 
-    public VolunteerDTO(int user_id, int volunteer_id, int training_id, String firstName,
-            String lastName, String email, String phone, String address, Date birthDate,
+    public VolunteerDTO(int user_id, String firstName, String lastName,
+            String email, String phone, String address, Date birthDate,
             VolunteerResourcesDTO volunteerResourcesDTO) {
 
         this.user_id = user_id;
-        this.volunteer_id = volunteer_id;
-        this.training_id = training_id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -38,22 +34,6 @@ public class VolunteerDTO implements Serializable{
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
-    }
-
-    public int getVolunteer_id() {
-        return volunteer_id;
-    }
-
-    public void setVolunteer_id(int volunteer_id) {
-        this.volunteer_id = volunteer_id;
-    }
-
-    public int getTraining_id() {
-        return training_id;
-    }
-
-    public void setTraining_id(int training_id) {
-        this.training_id = training_id;
     }
 
     public String getFirstName() {

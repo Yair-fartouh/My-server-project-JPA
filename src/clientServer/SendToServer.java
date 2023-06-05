@@ -4,6 +4,8 @@ import ExcelReader.Location;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SendToServer implements Serializable {
 
@@ -20,6 +22,8 @@ public class SendToServer implements Serializable {
     private String typeClient;
     private String loginOrRegister;
     private String requestType;
+    private List<Integer> preferences = new ArrayList<>();
+    private String message;
 
     public String getKindOfHelp() {
         return kindOfHelp;
@@ -123,5 +127,21 @@ public class SendToServer implements Serializable {
 
     public void setRequestType(String requestType) {
         this.requestType = requestType;
+    }
+
+    public List<Integer> getPreferences() {
+        return preferences;
+    }
+
+    public void setPreferences(List<Integer> preferences) {
+        this.preferences = preferences;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

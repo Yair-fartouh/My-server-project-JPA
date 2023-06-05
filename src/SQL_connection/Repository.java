@@ -118,6 +118,31 @@ public class Repository implements VolunteerDAO {
         query.execute();
 
         Integer userId = (Integer) query.getOutputParameterValue("userId");
+
+        StoredProcedureQuery queryLocation = em.createStoredProcedureQuery("insert_location");
+        queryLocation.registerStoredProcedureParameter("user_id", Integer.class, ParameterMode.IN);
+        queryLocation.registerStoredProcedureParameter("LAT", Float.class, ParameterMode.IN);
+        queryLocation.registerStoredProcedureParameter("LNG", Float.class, ParameterMode.IN);
+        queryLocation.registerStoredProcedureParameter("id", Integer.class, ParameterMode.OUT);
+
+        queryLocation.setParameter("user_id", userId);
+        queryLocation.setParameter("LAT", sts.getLocation().getLatitude());
+        queryLocation.setParameter("LNG", sts.getLocation().getLongitude());
+        queryLocation.execute();
+
+        Integer location_id = (Integer) queryLocation.getOutputParameterValue("id");
+
+        for (Integer trainingId : sts.getPreferences()) {
+            StoredProcedureQuery queryVolunteer = em.createStoredProcedureQuery("insert_volunteer");
+            queryVolunteer.registerStoredProcedureParameter("user_id", Integer.class, ParameterMode.IN);
+            queryVolunteer.registerStoredProcedureParameter("location_id", Integer.class, ParameterMode.IN);
+            queryVolunteer.registerStoredProcedureParameter("training_id", Integer.class, ParameterMode.IN);
+
+            queryVolunteer.setParameter("user_id", userId);
+            queryVolunteer.setParameter("location_id", location_id);
+            queryVolunteer.setParameter("training_id", trainingId);
+            queryVolunteer.execute();
+        }
         commit();
         return userId;
     }
@@ -194,8 +219,6 @@ public class Repository implements VolunteerDAO {
         procedureQuery.registerStoredProcedureParameter("address", String.class, ParameterMode.OUT);
         procedureQuery.registerStoredProcedureParameter("email", String.class, ParameterMode.OUT);
         procedureQuery.registerStoredProcedureParameter("birthDate", Date.class, ParameterMode.OUT);
-        procedureQuery.registerStoredProcedureParameter("volunteer_id", Integer.class, ParameterMode.OUT);
-        procedureQuery.registerStoredProcedureParameter("training_id", Integer.class, ParameterMode.OUT);
 
         procedureQuery.setParameter("userId", getUser_id());
         procedureQuery.execute();
@@ -206,13 +229,9 @@ public class Repository implements VolunteerDAO {
         String address = (String) procedureQuery.getOutputParameterValue("address");
         String email = (String) procedureQuery.getOutputParameterValue("email");
         Date birthDate = (Date) procedureQuery.getOutputParameterValue("birthDate");
-        Integer volunteer_id = (Integer) procedureQuery.getOutputParameterValue("volunteer_id");
-        Integer training_id = (Integer) procedureQuery.getOutputParameterValue("training_id");
 
         VolunteerDTO volunteerDTO = new VolunteerDTO(
                 getUser_id(),
-                volunteer_id,
-                training_id,
                 firstName,
                 lastName,
                 email,

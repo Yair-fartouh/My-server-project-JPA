@@ -8,11 +8,14 @@ public class SocketServer {
 
     private final int PORT = 9999;
     private ServerSocket serverSocket;
+    private VolunteerData volunteerData;
 
     public void start() {
         try {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Server started on port " + PORT);
+
+            volunteerData = new VolunteerData();
 
             while (true) {
                 System.out.println("Waiting for client connection...");
@@ -20,7 +23,7 @@ public class SocketServer {
                 System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
 
                 // create a new thread to handle the client
-                Thread clientThread = new Thread(new ClientHandler(clientSocket));
+                Thread clientThread = new Thread(new ClientHandler(clientSocket, volunteerData));
                 clientThread.start();
             }
         } catch (IOException e) {
